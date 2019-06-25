@@ -37,29 +37,30 @@
 #' names(i.pc)
 
 
-IPCA <- function(delta_list, IMP) {
-    D_2 <- unlist(delta_list)[which(!is.na(unlist(delta_list)))]
-    Delta_0 <- data.frame(TF = rep(IMP[, 1], IMP[, 3]), matrix(D_2,
-                                                                 ncol = 2, byrow = TRUE))
-    colnames(Delta_0)[2:3] <- c("delta s", "delta c")
-    Delta <- Delta_0[, 2:3]
-    pc <- princomp(Delta, cor = FALSE, scores = TRUE)
-    layout(matrix(c(1, 2, 3, 3, 4, 4, 5, 5), 4, 2, byrow = TRUE), heights = c(1,
-                                                                              0.6, 0.6, 0.6))
-    barplot(pc$sdev^2, las = 2, main = "Variances of the principal components",
-            ylab = "Variances", ylim = c(0, 1), cex.main = 1)
-    plot(cumsum(pc$sdev^2)/sum(pc$sde^2), type = "b", axes = TRUE,
-         xlab = "number of components", ylab = "contribute to total variance")
-    box()
-    title(main = "Cumulate variances of the principal components", cex.main = 1)
-    scores <- pc$scores
-    load <- pc$loadings
-    for (i in 1:2) {
-        barplot(load[, i], ylim = c(-1, 1), ylab = paste("Comp.", i,
-                                                           sep = ""))
-        abline(h = 0)
-        if (i == 1)
-            title(main = "Loadings of the principal components")
-    }
-    return(list(summary = summary(pc), scores = scores, loadings = load))
+IPCA <- function (delta_list, IMP) 
+{
+  D_2 <- unlist(delta_list)[which(!is.na(unlist(delta_list)))]
+  Delta_0 <- data.frame(TF = rep(IMP[, 1], IMP[, 3]), matrix(D_2, 
+                                                             ncol = 2, byrow = TRUE))
+  colnames(Delta_0)[2:3] <- c("delta s", "delta c")
+  Delta <- Delta_0[, 2:3]
+  pc <- princomp(Delta, cor = FALSE, scores = TRUE)
+  layout(matrix(c(1, 2, 3, 4), 2, 2, byrow = TRUE), 
+         heights = c(1, 0.9))
+  barplot(pc$sdev^2/sum(pc$sde^2), las = 1, main = "Variances of the principal components", 
+          ylab = "Variances", ylim = c(0, 1), cex.lab = 1.3, cex.main = 1.3, cex.names = 1.3, cex.axis = 1.2)
+  plot(cumsum(pc$sdev^2)/sum(pc$sde^2), type = "b", axes = TRUE, 
+       xlab = "Number of components", ylab = "Cum. variances", cex.lab = 1.3, cex.axis=1.2)
+  box()
+  title(main = "Cumulate variances of the principal components", 
+        cex.main = 1.3)
+  scores <- pc$scores
+  load <- pc$loadings
+  for (i in 1:2) {
+    barplot(load[, i], ylim = c(-1, 1), yaxt='none', ylab = paste("Comp.", i, sep = ""), cex.lab = 1.6, cex.names = 1.6)
+    axis(2, seq(-1,1,1), cex.axis = 1.2)
+    abline(h = 0)
+    title(main = "Loadings of the principal components", cex.main = 1.4)
+  }
+  return(list(summary = summary(pc), scores = scores, loadings = load))
 }

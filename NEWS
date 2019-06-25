@@ -7,3 +7,10 @@ MAJOR CORRECTIONS
 
   o some loops were vectorized in the vignettes
 
+      CHANGES IN TFARM VERSION 1.1.1
+
+MAJOR CORRECTIONS
+
+  o function heatI uses heatmap.2 (from gplots)
+  
+  o function IPCA was corrected, i.e., it was displaying the wrong variances

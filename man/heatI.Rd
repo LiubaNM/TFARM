@@ -18,10 +18,10 @@ The Importance index of pairs of Transcription Factors as a heatmap
 \description{
 A square matrix (TFs x TFs) is built. The element (i,j) of such matrix
 contains the mean Importance Index (II) of the couple of transcription
-factors (TFi, TFj). This is rapresented in a heatmap visualization in
-which the scale color from red (dark) to white (light) indicates low mean
-importance of the couple (red), or high mean importance of the
-couple (white).
+factors (TFi, TFj). This is represented in a heatmap visualization,
+where the scale color from blue to white indicates low mean
+importance of the couple and from white to red indicates 
+high mean importance of the couple.
 }
 \examples{
 # Load p_TFs and I_c_2 from the data_man collection of datasets:

@@ -43,45 +43,39 @@
 #' IComp('FOSL2=1', r_FOSL2, r_noFOSL2, figures=TRUE)
 
 
-IComp <- function(TFi, rules_TF, rules_noTF, figures) {
-    if (length(TFi) > 1) {
-        TFi <- TFi[[1]]
-        for (i in 2:length(TFi)) TFi <- paste(TFi, TFi[[i]], sep = ",")
-    }
-    both <- cbind(rules_TF, rules_noTF)
-    if (all(is.na(both)) == TRUE) {
-        return(list(imp = NA, delta = NA))
-    } else {
-        diff_supp <- both[, 3] - both[, 8]
-        diff_conf <- both[, 4] - both[, 9]
-        diffs <- data.frame(both[, 1], both[, 6], diff_supp, diff_conf)
-        colnames(diffs)[1:2] <- colnames(both)[c(1,6)]
-    }
-    
-    # evaluation of the Importance Index of TF in each rule
-    imp_Z_rule_0 <- apply(diffs[, 3:4], 1, sum)
-    # consider only positives Importance Indexes
-    m <- max(rules_TF$support)
-    n <- dim(diffs)[1]
-    if (figures == TRUE) {
-        # layout(matrix(c(1,2,3,3), 2, 2, byrow = TRUE))
-        TF_i <- paste0(strsplit(TFi, "=")[[1]][1], "=0")
-        par(mfrow = c(1, 3))
-        matplot(both[, c(3, 8)], type = "l", lwd = 2, ylab = "support",
-                xlab = "rules ID", ylim = c(0, 1))
-        legend("topright", c(paste("with", TFi), paste("with", TF_i)),
-               col = c("black", "red"), lty = c(1, 2), lwd = c(2, 2))
-        title(main = "Rules support distribution")
-        matplot(both[, c(4, 9)], type = "l", lwd = 2, ylab = "confidence",
-                xlab = "rules ID", ylim = c(0, 1))
-        title(main = "Rules confidence distribution")
-        legend("topright", c(paste("with", TFi), paste("with", TF_i)),
-               col = c("black", "red"), lty = c(1, 2), lwd = c(2, 2))
-    }
-    # Consider only the rules with positive Importance Indexes
-    d_Z <- diffs[, 3:4]
-    rwi <- rules_TF
-    rwo <- rules_noTF
-    return(list(imp = imp_Z_rule_0, delta = d_Z, rwi = rwi, rwo = rwo))
+IComp <- function (TFi, rules_TF, rules_noTF, figures)
+{
+  if (length(TFi) > 1) {
+    TFi <- TFi[[1]]
+    for (i in 2:length(TFi)) TFi <- paste(TFi, TFi[[i]],
+                                          sep = ",")
+  }
+  both <- cbind(rules_TF, rules_noTF)
+  if (all(is.na(both)) == TRUE) {
+    return(list(imp = NA, delta = NA))
+  }
+  else {
+    diff_supp <- both[, 3] - both[, 8]
+    diff_conf <- both[, 4] - both[, 9]
+    diffs <- data.frame(both[, 1], both[, 6], diff_supp,
+                        diff_conf)
+    colnames(diffs)[1:2] <- colnames(both)[c(1, 6)]
+  }
+  imp_Z_rule_0 <- apply(diffs[, 3:4], 1, sum)
+  m <- max(rules_TF$support)
+  n <- dim(diffs)[1]
+  if (figures == TRUE) {
+    TF_i <- paste0(strsplit(TFi, "=")[[1]][1], "=0")
+    par(mfrow = c(1, 2))
+    matplot(both[, c(3, 8)], type = "l", lwd = 2, ylab = "support", xlab = "rules ID", xaxt="n", ylim = c(0, 1), cex.lab=1.3)
+    axis(1, at=1:dim(rules_TF)[1], labels=row.names(rules_TF), las=1)
+    legend("topright", c(paste("with", TFi), paste("with", TF_i)), col = c("black","red"), lty = c(1, 2), lwd = c(2, 2), cex=0.8)
+    matplot(both[, c(4, 9)], type = "l", lwd = 2, ylab = "confidence",xlab = "rules ID", xaxt="n", ylim = c(0, 1), cex.lab=1.3)
+    axis(1, at=1:dim(rules_TF)[1], labels=row.names(rules_TF), las=1)
+    legend("topright", c(paste("with", TFi),paste("with", TF_i)), col = c("black","red"), lty = c(1, 2), lwd = c(2, 2), cex=0.8)
+  }
+  d_Z <- diffs[, 3:4]
+  rwi <- rules_TF
+  rwo <- rules_noTF
+  return(list(imp = imp_Z_rule_0, delta = d_Z, rwi = rwi, rwo = rwo))
 }
-

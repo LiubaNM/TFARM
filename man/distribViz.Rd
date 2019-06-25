@@ -2,7 +2,7 @@
 % Please edit documentation in R/distribViz.R
 \name{distribViz}
 \alias{distribViz}
-\title{Visualizes with boxplots the Importance Index distribution
+\title{Boxplots visualization of the Importance Index distribution
 of a set of transcription factors.}
 \usage{
 distribViz(I, TFs)
@@ -20,13 +20,13 @@ For a set of candidate co-regulator transcription factors,
  the Importance Index distribution of each transcription factor
  is plotted in boxplots. The shape of every boxplot depends on:
  the dimension of the distribution, which is equal to the number of rules
- in which every transcription factor appears (the higher is such number,
+ in which each transcription factor appears (the higher is such number,
  the larger is a boxplot), the variability of the distribution
  (the higher is the variability of the Importance Index distribution,
  the longer is a boxplot). Moreover, the higher is the median of
  the Importance Index distribution for a candidate co-regulator
  transcription factor, the higher the boxplot is aligned with respect to
- the y axis.
+ the y-axis.
 }
 \examples{
 # Load IMP_Z and p from the data_man collection of datasets:
