@@ -43,41 +43,36 @@
 #' r_TEAD4 <- rulesGen(MCF7_chr1, 'TEAD4=1', 0.005, 0.62, TRUE)
 #'
 #' @seealso \link[arules]{apriori}
-rulesGen <- function(data, TF, minsupp, minconf, type) {
-
-    # Selection of the Indicator of presence matrix, where other values
-    # different from 0 are considered as representing presence and are set
-    # to 1
-    data <- as.data.frame(elementMetadata(data))
-    data[data != 0] <- 1
-
-    m <- dim(data)[2]
-    data.f <- data
-    # Transactions extraction
-    for (i in 1:m) {
-        data.f[, i] <- as.factor(data.f[, i])
-    }
-    trans <- as(data.f, "transactions")
-    names <- colnames(data.f)
-    TF_a <- unlist(strsplit(TF, "="))[1]
-    names_1 <- paste(names, "1", sep = "=")
-    names_1 <- names_1[names_1 != TF]
-    # Rules extraction
-    if (type == "TRUE") {
-        rules <- apriori(data.f, parameter = list(supp = minsupp, maxlen = 20,
-                                                  conf = minconf, target = "rules"), appearance = list(lhs = names_1,
-                                                                                                       rhs = TF, default = "none"))
-    } else {
-        rules <- apriori(data.f, parameter = list(supp = minsupp, maxlen = 20,
-                                                  conf = minconf, target = "rules"), appearance = list(rhs = TF,
-                                                                                                       default = "lhs"))
-
-    }
-    if (length(rules) == 0)
-        print("No rules found. Change parameter thresholds!") else if (length(rules) > 0) {
-            r.TF <- subset(rules, subset = rhs %ain% TF)
-            rules.TF = data.frame(lhs = labels(lhs(r.TF)), rhs = labels(rhs(r.TF)),
-                                  r.TF@quality)
-            return(rules.TF)
-        }
+rulesGen <- function (data, TF, minsupp, minconf, type)
+{
+  data <- as.data.frame(elementMetadata(data))
+  data[data != 0] <- 1
+  m <- dim(data)[2]
+  data.f <- data
+  for (i in 1:m) {
+    data.f[, i] <- as.factor(data.f[, i])
+  }
+  trans <- as(data.f, "transactions")
+  names <- colnames(data.f)
+  TF_a <- unlist(strsplit(TF, "="))[1]
+  names_1 <- paste(names, "1", sep = "=")
+  names_1 <- names_1[names_1 != TF]
+  if (type == "TRUE") {
+    rules <- apriori(data.f, parameter = list(supp = minsupp, minlen=2,
+                                              maxlen = 20, conf = minconf, target = "rules"),
+                     appearance = list(lhs = names_1, rhs = TF, default = "none"))
+  }
+  else {
+    rules <- apriori(data.f, parameter = list(supp = minsupp, minlen=2,
+                                              maxlen = 20, conf = minconf, target = "rules"),
+                     appearance = list(rhs = TF, default = "lhs"))
+  }
+  if (length(rules) == 0)
+    print("No rules found. Change parameter thresholds!")
+  else if (length(rules) > 0) {
+    r.TF <- subset(rules, subset = rhs %ain% TF)
+    rules.TF = data.frame(lhs = labels(lhs(r.TF)), rhs = labels(rhs(r.TF)),
+                          r.TF@quality)
+    return(rules.TF)
+  }
 }
